@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+
+namespace OnlineCinemaTicketBookingSystem
+{
+    internal class User
+    {
+        string customerName, movieName, location;
+        public int customerId, BookingID;
+        // DateTime issueDate;
+        Admin admin = new Admin();
+        public void BookMovie()
+        {
+            Random rnd = new Random();
+            int BID = rnd.Next(0, int.MaxValue);
+            if (File.Exists(@"C:\Users\hp\Documents\TrainningRepo\AssignmentRepo\MovieTicketBookingSystem\movieDetails.txt"))
+            {
+                FileStream fileStreamObj = new FileStream(@"C:\Users\hp\Documents\TrainningRepo\AssignmentRepo\MovieTicketBookingSystem\movieDetails.txt", FileMode.Open);
+                StreamReader streamReaderObj = new StreamReader(fileStreamObj);
+                while (streamReaderObj.Peek() > 0)
+                {
+                    Console.WriteLine(streamReaderObj.ReadLine());
+                }
+                streamReaderObj.Dispose();
+                streamReaderObj.Close();
+                fileStreamObj.Close();
+                
+                Console.WriteLine("Enter Your name");
+                customerName = Console.ReadLine();
+
+                Console.WriteLine("Enter Your  customer Id");
+                customerId = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Enter the movie name you want to book.");
+                movieName = Console.ReadLine();
+
+                Console.WriteLine("Enter the location where you want to book movie.");
+                location = Console.ReadLine();
+
+                Console.WriteLine("Your Booking ID is : ");
+                Console.WriteLine(BookingID = rnd.Next(0,int.MaxValue));
+                
+
+                admin.StoreCustomerDetails(customerName, customerId, movieName, location, BookingID);
+
+                Console.WriteLine("Thanks for booking.");
+                Console.WriteLine("Have a nice day!");
+            }
+            else
+            {
+                Console.WriteLine("Sorry, No Movies Available");
+            }
+
+
+        }
+        public void CancleMovie()
+        {
+            Console.Write("Enter Movie Id of which u want to cancel - ");
+            string ans = Console.ReadLine();
+            FileStream fileStreamObj1 = new FileStream(@"C:\Users\hp\Documents\TrainningRepo\AssignmentRepo\MovieTicketBookingSystem\userDetails.txt", FileMode.Open);
+            StreamReader StreamReaderObj1 = new StreamReader(fileStreamObj1);
+            FileStream fileStreamObj2 = new FileStream(@"C:\Users\hp\Documents\TrainningRepo\AssignmentRepo\MovieTicketBookingSystem\userDetails1.txt", FileMode.Create, FileAccess.Write);
+            StreamWriter streamWriterObj2 = new StreamWriter(fileStreamObj2);
+            while (StreamReaderObj1.Peek() > 0)
+            {
+                string line = StreamReaderObj1.ReadLine();
+                if (!line.Contains(ans))
+                {
+                    streamWriterObj2.WriteLine(line);
+                }
+            }
+            StreamReaderObj1.Dispose();
+            StreamReaderObj1.Close();
+            fileStreamObj1.Close();
+            streamWriterObj2.Dispose();
+            streamWriterObj2.Close();
+            fileStreamObj2.Close();
+            File.Delete(@"C:\Users\hp\Documents\TrainningRepo\AssignmentRepo\MovieTicketBookingSystem\userDetails.txt");
+            File.Move(@"C:\Users\hp\Documents\TrainningRepo\AssignmentRepo\MovieTicketBookingSystem\userDetails1.txt", @"C:\Users\hp\Documents\TrainningRepo\AssignmentRepo\MovieTicketBookingSystem\userDetails.txt");
+            Console.WriteLine("Your Booking is been CANCLED");
+        }
+
+    }
+}
